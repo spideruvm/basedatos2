@@ -1,0 +1,69 @@
+/*
+CREATE TABLE USUARIO1 (ID_USUARIO1 INTEGER,
+ NOMBRE VARCHAR2(120),
+ EMAIL VARCHAR2(90), SUELDO_BASE FLOAT,
+CONSTRAINT ID_USUARIO1_PK PRIMARY KEY(ID_USUARIO1));
+
+create sequence sec_usuario1
+start with 1
+increment by 1
+nomaxvalue;
+
+create or replace PROCEDURE GUARDAR_USUARIO1(
+MY_ID_USUARIO1 OUT INTEGER, MY_NOMBRE IN VARCHAR2,
+MY_EMAIL IN VARCHAR2, MY_SUELDO_BASE IN FLOAT)
+AS
+BEGIN 
+SELECT SEC_USUARIO1.NEXTVAL INTO MY_ID_USUARIO1 FROM DUAL;
+INSERT INTO USUARIO1 VALUES(MY_ID_USUARIO1, MY_NOMBRE,
+MY_EMAIL, MY_SUELDO_BASE);
+END;
+
+DECLARE
+  MY_ID INTEGER;
+BEGIN
+  GUARDAR_USUARIO1(MY_ID,'CHANA','CHANA@GMAIL.COM',6000);
+  GUARDAR_USUARIO1(MY_ID,'PANCRACIO','PAN@GMAIL.COM',5000);
+  GUARDAR_USUARIO1(MY_ID,'PETRONILA','PETRO@GMAIL.COM',8000);
+END;
+/
+
+select * from usuario1;
+actualizar la tabla usuario1 con la siguiente logica
+  suponer que:el sueldo por hora es de 200 pesos y las horas laboradas son 48.
+  
+  actualizar el suldo base como sigue
+  el nuevo sueldo dbe ser el acumulador del anterior para seis mil
+  pesos el nuevo sueldo por hora no es de 200 sera ahora de 300
+*/
+--empezamos el cursor explicito con update
+declare
+SUELDO_HORA INTEGER:=200;
+CURSOR CUR_PAGAR_NOMINA IS SELECT * FROM USUARIO1 FOR UPDATE;
+BEGIN
+FOR REC_USUARIO1 in CUR_PAGAR_NOMINA LOOP
+  IF REC_USUARIO1.SUELDO_BASE >= 6000 THEN
+  UPDATE USUARIO1 SET SUELDO_BASE=REC_USUARIO1.SUELDO_BASE+48*300
+  WHERE CURRENT OF CUR_PAGAR_NOMINA;
+  ELSE
+  UPDATE USUARIO1 SET SUELDO_BASE=REC_USUARIO1.SUELDO_BASE+48*200
+  WHERE CURRENT OF CUR_PAGAR_NOMINA;
+  END IF;
+  END LOOP;
+  DBMS_OUTPUT.PUT_LINE('PAGO DE NOMINA EXITOSO!!');
+  END;
+  /
+  SELECT * FROM USUARIO1;
+  
+  /*
+se tiene un aeropuerto que mantiene unas aerolineas con destinos variadas y 
+origenes variados
+
+cada aerolinea mantiene vuelos que tiene todos un maximo
+de 200 pasajeros por avion, el costo del boleto varia
+deacuerdo a la aerolinea y el destino, para volar se
+requiere el nombre del pasajero y su edad,
+el pasajero es libre de seleccionar la fecha de su vuelo
+proponer una base de datos normalizada para este caso.
+*/
+  
