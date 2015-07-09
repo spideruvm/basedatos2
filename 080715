@@ -1,0 +1,10 @@
+create or replace trigger respaldo_xxx after insert on usuario_xxx
+for each row
+begin
+if :new.edad <18 then
+insert into menor_xxx values(:new.nombre,:new.edad);
+else
+insert into mayor_xxx values (:new.nombre,:new.edad);
+enf if;
+end;
+/
