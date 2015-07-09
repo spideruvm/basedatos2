@@ -5,6 +5,12 @@ if :new.edad <18 then
 insert into menor_xxx values(:new.nombre,:new.edad);
 else
 insert into mayor_xxx values (:new.nombre,:new.edad);
-enf if;
+end if;
 end;
 /
+
+INSERT INTO usuario_xxx VALUES('pedro',50);
+  
+  select * from menor_xxx;
+  select * from mayor_xxx;
+  select * from usuario_xxx;
